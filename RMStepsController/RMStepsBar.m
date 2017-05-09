@@ -52,11 +52,7 @@
 
 #pragma mark - Helper Classes
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-@interface RMStepSeperatorView : UIView<CAAnimationDelegate>
-#else
 @interface RMStepSeperatorView : UIView
-#endif
 
 @property (nonatomic, strong) CAShapeLayer *leftShapeLayer;
 @property (nonatomic, strong) CAShapeLayer *rightShapeLayer;
@@ -217,8 +213,6 @@
 @end
 
 @implementation RMStepsBar
-
-@dynamic delegate;
 
 @synthesize seperatorColor = _seperatorColor;
 
@@ -526,9 +520,11 @@
         
         if(CGRectContainsPoint(step.stepView.frame, touchLocation)) {
             NSInteger index = [self.stepDictionaries indexOfObject:aStepDict];
-            if(index < self.indexOfSelectedStep && self.allowBackward) {
-                [self.delegate stepsBar:self shouldSelectStepAtIndex:index];
+            
+            if(index < self.indexOfSelectedStep && !self.allowBackward) {
+                continue;
             }
+            [self.delegate stepsBar:self shouldSelectStepAtIndex:index];
         }
     }
 }
